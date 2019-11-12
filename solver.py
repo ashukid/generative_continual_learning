@@ -27,8 +27,9 @@ from utils import plot_images
 
 class dataset(torch.utils.data.Dataset):
     
-    def __init__(self,data):
-        self.data=data
+    def __init__(self,xdata,ydata):
+        self.xdata=xdata
+        self.ydata=ydata
         
     def to_tanh(self,image):
         upper=image.max()
@@ -43,19 +44,19 @@ class dataset(torch.utils.data.Dataset):
         return image
         
     def __getitem__(self,idx):
-        image=self.to_sigmoid(self.data[idx,1:]).astype(np.float32).reshape((1,28,28))
-        label=self.data[idx,0].astype(np.int64)
+        image=self.to_sigmoid(self.xdata[idx,:]).astype(np.float32)
+        label=self.ydata[idx].astype(np.int64)
         return image,label
     
     def __len__(self):
-        return len(self.data)
+        return len(self.xdata)
 
 
 # In[7]:
 
 
-def load_dataset(data,batch_size):
-    dset=dataset(data)
+def load_dataset(xdata,ydata,batch_size):
+    dset=dataset(xdata,ydata)
     dloader=torch.utils.data.DataLoader(dset,batch_size=batch_size,shuffle=True)
     
     return dloader
@@ -132,7 +133,7 @@ def train(dloader,epoch,path):
 # In[18]:
 
 
-def main(data,batch_size,epoch,path):
-    dloader=load_dataset(data,batch_size)
+def main(xdata,ydata,batch_size,epoch,path):
+    dloader=load_dataset(xdata,ydata,batch_size)
     train(dloader,epoch,path)
 

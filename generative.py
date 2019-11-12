@@ -43,7 +43,7 @@ class dataset(torch.utils.data.Dataset):
         return image
         
     def __getitem__(self,idx):
-        image=self.to_tanh(self.data[idx,1:]).astype(np.float32).reshape((1,28,28))
+        image=self.to_tanh(self.data[idx,:]).astype(np.float32)
         return image
     
     def __len__(self):
@@ -173,5 +173,5 @@ def train(dloader,epoch,gpath,dpath):
 
 def main(data,batch_size,epoch,gpath,dpath):
     dloader=load_dataset(data,batch_size)
-    train(dloader,epoch,gmodel,dmodel,gpath,dpath)
+    train(dloader,epoch,gpath,dpath)
 
